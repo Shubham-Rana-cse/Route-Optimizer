@@ -26,7 +26,7 @@
   
   Build Tool: Vite for fast development and optimized builds
 
-#Use Cases
+# Use Cases
 
   Perfect for delivery route planning, travel itinerary optimization, sales territory management, or any scenario requiring efficient multi-stop routing. The application provides practical solutions for real-world logistics challenges while maintaining an intuitive user experience.
 
