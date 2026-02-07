@@ -1,16 +1,15 @@
-import React from 'react';
-import { Menu, X, MapPin, Route } from 'lucide-react';
-import { useAppContext } from '../context/AppContext';
-import { motion, AnimatePresence } from 'framer-motion';
-import Sidebar from './Sidebar';
+import { Menu, X, MapPin, Route } from 'lucide-react'
+import { useAppContext } from '../context/AppContext'
+import { motion, AnimatePresence } from 'framer-motion'
+import Sidebar from './Sidebar'
 
-const MobileControls: React.FC = () => {
-  const { 
-    locations, 
-    isSidebarOpen, 
-    toggleSidebar, 
-    optimizedRoute 
-  } = useAppContext();
+const MobileControls = () => {
+  const {
+    locations,
+    isSidebarOpen,
+    toggleSidebar,
+    optimizedRoute,
+  } = useAppContext()
 
   return (
     <>
@@ -21,18 +20,23 @@ const MobileControls: React.FC = () => {
             onClick={toggleSidebar}
             className="flex items-center justify-center w-10 h-10 rounded-full bg-indigo-600 text-white shadow-md"
           >
-            {isSidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isSidebarOpen ? (
+              <X className="w-5 h-5" />
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
           </button>
-          
+
           <div className="flex items-center">
             <div className="flex items-center justify-center bg-indigo-100 rounded-full w-8 h-8 text-indigo-700">
               <MapPin className="w-4 h-4" />
             </div>
             <span className="ml-2 text-gray-700 font-medium">
-              {locations.length} {locations.length === 1 ? 'location' : 'locations'}
+              {locations.length}{' '}
+              {locations.length === 1 ? 'location' : 'locations'}
             </span>
           </div>
-          
+
           {optimizedRoute && (
             <div className="flex items-center">
               <div className="flex items-center justify-center bg-green-100 rounded-full w-8 h-8 text-green-700">
@@ -45,7 +49,7 @@ const MobileControls: React.FC = () => {
           )}
         </div>
       </div>
-      
+
       {/* Mobile sidebar */}
       <AnimatePresence>
         {isSidebarOpen && (
@@ -70,7 +74,7 @@ const MobileControls: React.FC = () => {
         )}
       </AnimatePresence>
     </>
-  );
-};
+  )
+}
 
-export default MobileControls;
+export default MobileControls

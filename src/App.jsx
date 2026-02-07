@@ -1,8 +1,7 @@
-import React from 'react';
-import { AppProvider } from './context/AppContext';
-import MapContainer from './components/MapContainer';
-import Sidebar from './components/Sidebar';
-import MobileControls from './components/MobileControls';
+import { AppProvider } from './context/AppContext'
+import MapContainer from './components/MapContainer'
+import Sidebar from './components/Sidebar'
+import MobileControls from './components/MobileControls'
 
 function App() {
   return (
@@ -12,19 +11,19 @@ function App() {
         <div className="hidden md:block md:w-96 h-full overflow-auto">
           <Sidebar />
         </div>
-        
+
         {/* Map container */}
         <div className="flex-1 relative">
           <MapContainer />
         </div>
-        
+
         {/* Mobile controls */}
         <div className="md:hidden">
           <MobileControls />
         </div>
       </div>
     </AppProvider>
-  );
+  )
 }
 
-export default App;
+export default App

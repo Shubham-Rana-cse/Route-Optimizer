@@ -1,16 +1,15 @@
-import React from 'react';
-import { MapPin, Trash } from 'lucide-react';
-import { useAppContext } from '../context/AppContext';
-import { motion, AnimatePresence } from 'framer-motion';
+import { MapPin, Trash } from 'lucide-react'
+import { useAppContext } from '../context/AppContext'
+import { motion, AnimatePresence } from 'framer-motion'
 
-const LocationList: React.FC = () => {
-  const { 
-    locations, 
-    removeLocation, 
-    selectedLocationIndex, 
+const LocationList = () => {
+  const {
+    locations,
+    removeLocation,
+    selectedLocationIndex,
     selectLocation,
-    optimizedRoute
-  } = useAppContext();
+    optimizedRoute,
+  } = useAppContext()
 
   if (locations.length === 0) {
     return (
@@ -20,22 +19,22 @@ const LocationList: React.FC = () => {
           Search and select locations or click on the map to add them to your route
         </p>
       </div>
-    );
+    )
   }
 
   // Get the ordered locations if we have an optimized route
-  const orderedLocations = optimizedRoute 
-    ? optimizedRoute.order.map(index => locations[index]) 
-    : locations;
+  const orderedLocations = optimizedRoute
+    ? optimizedRoute.order.map((index) => locations[index])
+    : locations
 
   return (
     <div className="flex-1 overflow-y-auto min-h-[200px] mb-4 pr-2 -mr-2">
       <AnimatePresence>
         {orderedLocations.map((location, index) => {
-          const originalIndex = optimizedRoute 
-            ? locations.findIndex(loc => loc.id === location.id)
-            : index;
-            
+          const originalIndex = optimizedRoute
+            ? locations.findIndex((loc) => loc.id === location.id)
+            : index
+
           return (
             <motion.div
               key={location.id}
@@ -53,29 +52,31 @@ const LocationList: React.FC = () => {
               <div className="flex items-center justify-center bg-indigo-100 rounded-full w-8 h-8 text-indigo-700 font-medium flex-shrink-0">
                 {optimizedRoute ? index + 1 : <MapPin className="w-4 h-4" />}
               </div>
-              
+
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-gray-800 truncate">{location.name}</p>
+                <p className="font-medium text-gray-800 truncate">
+                  {location.name}
+                </p>
                 <p className="text-xs text-gray-500">
                   {location.lat.toFixed(6)}, {location.lng.toFixed(6)}
                 </p>
               </div>
-              
+
               <button
                 onClick={(e) => {
-                  e.stopPropagation();
-                  removeLocation(location.id);
+                  e.stopPropagation()
+                  removeLocation(location.id)
                 }}
                 className="opacity-0 group-hover:opacity-100 focus:opacity-100 text-gray-400 hover:text-red-500 transition-opacity"
               >
                 <Trash className="w-4 h-4" />
               </button>
             </motion.div>
-          );
+          )
         })}
       </AnimatePresence>
     </div>
-  );
-};
+  )
+}
 
-export default LocationList;
+export default LocationList

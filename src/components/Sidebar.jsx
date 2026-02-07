@@ -1,26 +1,27 @@
-import React from 'react';
-import { MapPin, RotateCw, List, Route, Trash2 } from 'lucide-react';
-import { useAppContext } from '../context/AppContext';
-import SearchBar from './SearchBar';
-import LocationList from './LocationList';
-import RouteDetails from './RouteDetails';
-import { motion } from 'framer-motion';
+import { MapPin, RotateCw, List, Route, Trash2 } from 'lucide-react'
+import { useAppContext } from '../context/AppContext'
+import SearchBar from './SearchBar'
+import LocationList from './LocationList'
+import RouteDetails from './RouteDetails'
+import { motion } from 'framer-motion'
 
-const Sidebar: React.FC = () => {
-  const { 
-    locations, 
-    optimizedRoute, 
-    isCalculating, 
-    clearLocations, 
-    calculateRoute 
-  } = useAppContext();
+const Sidebar = () => {
+  const {
+    locations,
+    optimizedRoute,
+    isCalculating,
+    clearLocations,
+    calculateRoute,
+  } = useAppContext()
 
   return (
     <div className="h-full bg-white shadow-md p-4 flex flex-col">
       <header className="mb-6">
         <div className="flex items-center gap-2 mb-2">
           <MapPin className="w-6 h-6 text-indigo-600" />
-          <h1 className="text-2xl font-bold text-gray-800">Travel Route Optimizer</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Travel Route Optimizer
+          </h1>
         </div>
         <p className="text-sm text-gray-600">
           Find the optimal route between multiple locations.
@@ -34,7 +35,8 @@ const Sidebar: React.FC = () => {
           <List className="w-5 h-5" /> Selected Locations
         </h2>
         <span className="text-sm bg-indigo-100 text-indigo-800 py-1 px-2 rounded-full">
-          {locations.length} {locations.length === 1 ? 'location' : 'locations'}
+          {locations.length}{' '}
+          {locations.length === 1 ? 'location' : 'locations'}
         </span>
       </div>
 
@@ -78,10 +80,10 @@ const Sidebar: React.FC = () => {
           Clear All Locations
         </motion.button>
       </div>
-      
+
       {optimizedRoute && <RouteDetails />}
     </div>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar
