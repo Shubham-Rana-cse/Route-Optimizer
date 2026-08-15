@@ -11,7 +11,7 @@ export async function searchLocations(query) {
           format: 'json',
           limit: 5,
           countrycodes: 'in', // India country code
-          viewbox: '76.8,28.4,77.6,28.8', // Delhi approximate bounding box
+          viewbox: '76.8,28.4,77.6,28.8', // Delhi approximate bounding box    //for whole india -> 68.0, 8.0, 97.5, 37.5
           bounded: 1,
         },
         headers: {

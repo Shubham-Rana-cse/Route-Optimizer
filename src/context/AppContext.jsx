@@ -1,5 +1,5 @@
 import { createContext, useState, useContext } from 'react'
-import { calculateOptimalRoute } from '../utils/tspSolver_optimized'
+import { calculateOptimalRoute } from '../utils/tspSolver_optimized_2opt'
 
 const AppContext = createContext(undefined)
 
