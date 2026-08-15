@@ -14,7 +14,7 @@
 
 # Technology Stack
 
-  Frontend: React 18 with TypeScript for type safety
+  Frontend: React 18
   
   Mapping: Leaflet and React-Leaflet for interactive maps
   
