@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { Search, Loader2, MapPin } from 'lucide-react'
 import { useAppContext } from '../context/AppContext'
-import { searchLocations } from '../services/mapService'
+import { searchLocations } from '../services/mapService_optimized'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const SearchBar = () => {
