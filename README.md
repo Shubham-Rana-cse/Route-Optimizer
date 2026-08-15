@@ -219,6 +219,7 @@ Nearest Neighbor + 2-opt heuristic solution.
 
 
 ### Complexity summary
+---
 
 | Component | Complexity |
 |---|---|
