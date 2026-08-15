@@ -153,6 +153,47 @@ For the current implementation:
 The final tour distance is recalculated from the existing matrix after
 2-opt.
 
+To be at safer side I have used ```MAX_PASSES = Math.max(50, Math.min(150, 2 * n));```
+This is deliberately not a tight limit. It gives 2-opt plenty of opportunity to improve while preventing an unexpectedly long optimization phase.
+
+### 5. Exact TSP with Held-Karp
+
+Held-Karp was added as an exact TSP solver for small numbers of locations.
+
+The current optimization pipeline is:
+
+```text
+OSRM /table
+     ↓
+Distance Matrix
+     ↓
+Nearest Neighbor
+     ↓
+2-opt
+     ↓
+Heuristic Solution
+     ↓
+Held-Karp (small n only)
+     ↓
+Best available solution
+```
+
+Held-Karp guarantees the optimal TSP tour but has exponential complexity:
+
+Time: O(n² · 2ⁿ)
+Space: O(n · 2ⁿ)
+
+Because of this, it is only used for small inputs. The current intended limit is n ≤ 20. For larger inputs, the system uses the Nearest Neighbor + 2-opt solution.
+
+This gives the application two modes:
+
+Small trips: Exact optimization using Held-Karp.
+Larger trips: Fast heuristic optimization using Nearest Neighbor + 2-opt.
+
+The distance matrix is still obtained through a single OSRM /table request, so adding Held-Karp does not introduce additional OSRM matrix API calls. It only increases local CPU and memory usage when the exact solver is executed.
+
+Held-Karp is therefore deliberately restricted to small instances, while Nearest Neighbor + 2-opt remains the scalable approach for larger routes.
+
 ## Current Scenario
 
 The current implementation has removed the original **O(n²) HTTP-request
@@ -160,18 +201,22 @@ bottleneck** for matrix generation.
 
 The main route-calculation flow is now:
 
-``` text
+```text
 1 × OSRM /table request
         +
 O(n²) local Nearest Neighbor
         +
 O(k · n²) 2-opt
         +
+O(n² · 2ⁿ) Held-Karp for small n
+        +
 O(n) OSRM /route requests for final route geometry
 ```
 
-To be at safer side I have used ```MAX_PASSES = Math.max(50, Math.min(150, 2 * n));```
-This is deliberately not a tight limit. It gives 2-opt plenty of opportunity to improve while preventing an unexpectedly long optimization phase.
+Held-Karp is used only for small inputs (n ≤ 20) to obtain the exact
+optimal TSP solution. For larger inputs, the system relies on the
+Nearest Neighbor + 2-opt heuristic solution.
+
 
 ### Complexity summary
 
@@ -181,9 +226,14 @@ This is deliberately not a tight limit. It gives 2-opt plenty of opportunity to 
   Matrix HTTP requests                               **O(1)**
   Nearest Neighbor                                      O(n²)
   2-opt                                             O(k · n²)
+  Held-Karp                                        O(n² · 2ⁿ)
   2-opt auxiliary space                                  O(n)
+  Held-Karp space                                   O(n · 2ⁿ)
   Overall matrix/local algorithm space              **O(n²)**
   Final route geometry requests                          O(n)
+
+* For large inputs where Held-Karp is not executed. When Held-Karp is
+used, its O(n · 2ⁿ) memory requirement dominates.
 
 The key optimization is therefore not that the distance matrix became
 smaller---it did not. The improvement is that the complete road-distance
@@ -196,11 +246,16 @@ the previous quadratic number of HTTP requests.
 -   One request for the complete distance matrix.
 -   Fast local route construction.
 -   2-opt improves the greedy Nearest Neighbor solution.
+-   Held-Karp provides an exact optimal solution for small trips.
 -   No additional OSRM requests are needed while testing 2-opt moves.
 -   Final route geometry is generated from OSRM and displayed using
     Leaflet.
 
 ## Current Limitation
+
+Held-Karp has exponential time and space complexity, so it is restricted
+to small inputs (n ≤ 20). For larger inputs, the scalable
+Nearest Neighbor + 2-opt approach is used.
 
 The final route visualization still requests road geometry separately
 for each consecutive pair in the selected tour. Therefore, after
