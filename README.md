@@ -226,7 +226,7 @@ Nearest Neighbor + 2-opt heuristic solution.
 | Distance matrix size | O(n²) |
 | Matrix HTTP requests | **O(1)** |
 | Nearest Neighbor | O(n²) |
-| 2-opt | O(k · n²) |
+| 2-opt | O(p · n³) |
 | Held-Karp | O(n² · 2ⁿ) |
 | 2-opt auxiliary space | O(n) |
 | Held-Karp space | O(n · 2ⁿ) |
@@ -235,6 +235,8 @@ Nearest Neighbor + 2-opt heuristic solution.
 
 NOTE:  For large inputs where Held-Karp is not executed. When Held-Karp is
 used, its O(n · 2ⁿ) memory requirement dominates.
+
+NOTE: O(p · n³) is now O(n³) since I have hardcoded the max value for p i.e. the maximum number of passes
 
 The key optimization is therefore not that the distance matrix became
 smaller---it did not. The improvement is that the complete road-distance

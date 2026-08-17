@@ -211,19 +211,23 @@ export async function calculateOptimalRoute(locations) {
   const distanceMatrix = await calculateDistanceMatrix(locations)
   const n = locations.length
 
-  const { order: nnOrder } = nearestNeighborTSP(distanceMatrix)
-  const heuristicOrder = twoOpt(distanceMatrix, nnOrder)
-  const heuristicDistance = calculateTourDistance(distanceMatrix, heuristicOrder)
-
-  let order = heuristicOrder
-  let distance = heuristicDistance
-
+  let order
+  let distance
+  
   if (n <= HELD_KARP_MAX_N) {
-    const { order: exactOrder, distance: exactDistance } = heldKarp(distanceMatrix)
-    if (exactDistance < distance) {
-      order = exactOrder
-      distance = exactDistance
-    }
+    // Exact solution
+    const result = heldKarp(distanceMatrix)
+
+    order = result.order
+    distance = result.distance
+  }
+  
+  else{
+    // Heuristic solution
+    const { order: nnOrder } = nearestNeighborTSP(distanceMatrix)
+
+    order = twoOpt(distanceMatrix, nnOrder)
+    distance = calculateTourDistance(distanceMatrix, order)
   }
 
   const path = await calculateRoutePath(locations, order)
